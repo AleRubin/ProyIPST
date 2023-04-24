@@ -121,7 +121,6 @@ object MainForm: TMainForm
       Left = 28
       Top = 2
       Action = FileSave
-      Caption = '&Save as'
       OnClick = ToolButtonSaveClick
     end
     object ToolButtonCloseAll: TToolButton
