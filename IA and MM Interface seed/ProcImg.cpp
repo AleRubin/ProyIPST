@@ -2279,7 +2279,7 @@ void TProcImg::SalyPim(Graphics::TBitmap* Bitmap)
 {
 BYTE *P;
 for(int i=0; i<Bitmap->Height; i++){
-P=(BYTE *)Bitmap->ScanLine[i];       
+P=(BYTE *)Bitmap->ScanLine[i];
 for(int j=0; j<Bitmap->Width; j++){
 int randNum = rand() % 100; //Generar un número aleatorio entre 0 y 99
         if(randNum < 5){ //5% de probabilidad de agregar ruido sal
@@ -2290,12 +2290,54 @@ int randNum = rand() % 100; //Generar un número aleatorio entre 0 y 99
             P[j*3] = 0; //Componente azul
             P[j*3+1] = 0; //Componente verde
             P[j*3+2] = 0; //Componente roja
-        } else {
-            P[j*3] = P[j*3]; //Negación lógica, equivalente a 255-P[j*3]; comp azul
-            P[j*3+1] = P[j*3+1]; //Negación lógica, equivalente a 255-P[j*3+1]; comp verde
-            P[j*3+2] = P[j*3+2]; //Negación lógica, equivalente a 255-P[j*3+2]; comp roja
         }
     }
 }
 }
 //----------------------------------------------------------------
+void TProcImg::FilMed(Graphics::TBitmap* Bitmap) {
+    BYTE *P;
+    BYTE *newP = new BYTE[Bitmap->Width * Bitmap->Height * 3];
+    int neighborhoodSize=1;
+    int radius = neighborhoodSize / 2;
+
+    for (int i = 0; i < Bitmap->Height; i++) {
+        for (int j = 0; j < Bitmap->Width; j++) {
+            int sumR = 0;
+            int sumG = 0;
+            int sumB = 0;
+            int count = 0;
+
+            for (int k = -radius; k <= radius; k++) {
+                for (int l = -radius; l <= radius; l++) {
+                    int row = i + k;
+                    int col = j + l;
+
+                    if (row >= 0 && row < Bitmap->Height && col >= 0 && col < Bitmap->Width) {
+                        P = (BYTE*)Bitmap->ScanLine[row];
+                        sumB += P[col * 3];
+                        sumG += P[col * 3 + 1];
+                        sumR += P[col * 3 + 2];
+                        count++;
+                    }
+                }
+            }
+
+            if (count > 0) {
+                newP[i * Bitmap->Width * 3 + j * 3] = sumB / count;
+                newP[i * Bitmap->Width * 3 + j * 3 + 1] = sumG / count;
+                newP[i * Bitmap->Width * 3 + j * 3 + 2] = sumR / count;
+            }
+        }
+    }
+
+    // Copiar los nuevos valores a la imagen original
+    for (int i = 0; i < Bitmap->Height; i++) {
+        P = (BYTE*)Bitmap->ScanLine[i];
+        memcpy(P, newP + i * Bitmap->Width * 3, Bitmap->Width * 3);
+    }
+
+    delete[] newP;
+}
+
+//---------------------------------------------------------------------------
