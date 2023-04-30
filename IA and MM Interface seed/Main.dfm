@@ -397,6 +397,10 @@ object MainForm: TMainForm
         Caption = 'Ruido Sal y Pimienta'
         OnClick = RuidoSalyPimienta1Click
       end
+      object FiltroMediana1: TMenuItem
+        Caption = 'Filtro Mediana'
+        OnClick = FiltroMediana1Click
+      end
     end
     object MMorphology: TMenuItem
       Caption = '&Morphology'
