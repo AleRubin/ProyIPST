@@ -1627,3 +1627,26 @@ if(SaveDialog->Execute())
 }
 //---------------------------------------------------------------------------
 
+
+void __fastcall TMainForm::RuidoSalyPimienta1Click(TObject *Sender)
+{
+TMDIChild *Child =(TMDIChild *)ActiveMDIChild;
+if(Child!=NULL){
+Graphics::TBitmap *Bitmap = new Graphics::TBitmap();
+Screen->Cursor = crHourGlass;
+Bitmap->Assign(Child->ActiveBitmap());
+MainForm->Pdi->SalyPim(Bitmap);
+String name=ExtractFilePath(Child->FileName)+"\Negative="+ExtractFileName(Child->FileName);
+CreateMDIChild(name,Bitmap);
+TMDIChild *Child2 =(TMDIChild *)ActiveMDIChild;
+String proceso=": Negative";
+AgregarAnalisisReporte(Child,Child2,proceso);
+//Agregar atributos del proceso
+//Child2->ReportProcessedImageChild->Lines->Add(AnsiString("Etiqueta: ")+);
+Child2->ImageClick(Child2);
+Screen->Cursor = crDefault;
+}
+
+}
+//---------------------------------------------------------------------------
+

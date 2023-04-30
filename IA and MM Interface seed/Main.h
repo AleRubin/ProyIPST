@@ -166,6 +166,7 @@ __published:	// IDE-managed Components
         TAction *AsTransparentSelection;
         TAction *AsDimSelection;
         TMenuItem *Weighted21;
+        TMenuItem *RuidoSalyPimienta1;
         void __fastcall MHAboutClick(TObject *Sender);
         void __fastcall FileOpenExecute(TObject *Sender);
         void __fastcall FileExitExecute(TObject *Sender);
@@ -212,6 +213,7 @@ __published:	// IDE-managed Components
         void __fastcall MCGWeightedClick(TObject *Sender);
         void __fastcall Weighted21Click(TObject *Sender);
         void __fastcall ToolButtonSaveClick(TObject *Sender);
+        void __fastcall RuidoSalyPimienta1Click(TObject *Sender);
 private:
         String dirApplication;
         MyLUT Original[256];

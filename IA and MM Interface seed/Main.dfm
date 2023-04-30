@@ -1,8 +1,8 @@
 object MainForm: TMainForm
-  Left = 513
-  Top = 235
-  Width = 981
-  Height = 583
+  Left = 1393
+  Top = 128
+  Width = 526
+  Height = 539
   Caption = 'Image Processing System (Student'#39's Edition)'
   Color = clAppWorkSpace
   Font.Charset = DEFAULT_CHARSET
@@ -24,8 +24,8 @@ object MainForm: TMainForm
   TextHeight = 13
   object StatusBar: TStatusBar
     Left = 0
-    Top = 505
-    Width = 965
+    Top = 461
+    Width = 510
     Height = 19
     Panels = <
       item
@@ -99,7 +99,7 @@ object MainForm: TMainForm
   object TBFile: TToolBar
     Left = 0
     Top = 0
-    Width = 965
+    Width = 510
     Height = 31
     AutoSize = True
     BorderWidth = 1
@@ -122,7 +122,6 @@ object MainForm: TMainForm
       Top = 2
       Action = FileSave
       Caption = '&Save as'
-      OnClick = ToolButtonSaveClick
     end
     object ToolButtonCloseAll: TToolButton
       Left = 51
@@ -394,6 +393,10 @@ object MainForm: TMainForm
     end
     object MTools: TMenuItem
       Caption = '&Tools'
+      object RuidoSalyPimienta1: TMenuItem
+        Caption = 'Ruido Sal y Pimienta'
+        OnClick = RuidoSalyPimienta1Click
+      end
     end
     object MMorphology: TMenuItem
       Caption = '&Morphology'

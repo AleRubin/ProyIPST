@@ -2279,7 +2279,7 @@ void TProcImg::SalyPim(Graphics::TBitmap* Bitmap)
 {
 BYTE *P;
 for(int i=0; i<Bitmap->Height; i++){
-P=(BYTE *)Bitmap->ScanLine[i];       
+P=(BYTE *)Bitmap->ScanLine[i];
 for(int j=0; j<Bitmap->Width; j++){
 int randNum = rand() % 100; //Generar un número aleatorio entre 0 y 99
         if(randNum < 5){ //5% de probabilidad de agregar ruido sal
