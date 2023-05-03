@@ -2297,48 +2297,50 @@ int randNum = rand() % 100; //Generar un número aleatorio entre 0 y 99
 //----------------------------------------------------------------
 void TProcImg::FilMed(Graphics::TBitmap* Bitmap)
 {
-    int windowSize=2;
-    int halfWindow = windowSize / 2;
-    int height = Bitmap->Height;
-    int width = Bitmap->Width;
-    BYTE* P = (BYTE*)Bitmap->ScanLine[0];
-    BYTE* temp = new BYTE[height * width * 3];
+int windowSize = 2;
+int halfWindow = windowSize / 2;
+int height = Bitmap->Height;
+int width = Bitmap->Width;
+BYTE* P = (BYTE*)Bitmap->ScanLine[0];
+BYTE* temp = new BYTE[height * width * 3];
 
-    for (int i = 0; i < height; i++) {
-        P = (BYTE*)Bitmap->ScanLine[i];
-        for (int j = 0; j < width; j++) {
-            int sumR = 0, sumG = 0, sumB = 0;
-            int count = 0;
-            for (int k = i - halfWindow; k <= i + halfWindow; k++) {
-                if (k < 0 || k >= height) continue;
-                for (int l = j - halfWindow; l <= j + halfWindow; l++) {
-                    if (l < 0 || l >= width) continue;
-                    BYTE* neighbor = (BYTE*)Bitmap->ScanLine[k] + l * 3;
-                    if (neighbor[0] != 0 && neighbor[0] != 255 &&
-                        neighbor[1] != 0 && neighbor[1] != 255 &&
-                        neighbor[2] != 0 && neighbor[2] != 255) {
-                        sumR += neighbor[2];
-                        sumG += neighbor[1];
-                        sumB += neighbor[0];
-                        count++;
-                    }
+for (int i = 0; i < height; i++) {
+    P = (BYTE*)Bitmap->ScanLine[i];
+    for (int j = 0; j < width; j++) {
+        int sumR = 0, sumG = 0, sumB = 0;
+        int count = 0;
+        for (int k = i - halfWindow; k <= i + halfWindow; k++) {
+            if (k < 0 || k >= height) continue;
+            for (int l = j - halfWindow; l <= j + halfWindow; l++) {
+                if (l < 0 || l >= width) continue;
+                BYTE* neighbor = (BYTE*)Bitmap->ScanLine[k] + l * 3;
+                if (neighbor[0] != 0 && neighbor[0] != 255 &&
+                    neighbor[1] != 0 && neighbor[1] != 255 &&
+                    neighbor[2] != 0 && neighbor[2] != 255) {
+                    sumR += neighbor[2];
+                    sumG += neighbor[1];
+                    sumB += neighbor[0];
+                    count++;
                 }
             }
-            if (count == 0) {
-                temp[i * width * 3 + j * 3 + 2] = P[j * 3 + 2];
-                temp[i * width * 3 + j * 3 + 1] = P[j * 3 + 1];
-                temp[i * width * 3 + j * 3] = P[j * 3];
-            }
-            else {
-                temp[i * width * 3 + j * 3 + 2] = sumR / count;
-                temp[i * width * 3 + j * 3 + 1] = sumG / count;
-                temp[i * width * 3 + j * 3] = sumB / count;
-            }
+        }
+        if (count == 0) {
+            temp[(height - i - 1) * width * 3 + j * 3] = P[j * 3];
+            temp[(height - i - 1) * width * 3 + j * 3 + 1] = P[j * 3 + 1];
+            temp[(height - i - 1) * width * 3 + j * 3 + 2] = P[j * 3 + 2];
+        }
+        else {
+            temp[(height - i - 1) * width * 3 + j * 3] = sumB / count;
+            temp[(height - i - 1) * width * 3 + j * 3 + 1] = sumG / count;
+            temp[(height - i - 1) * width * 3 + j * 3 + 2] = sumR / count;
         }
     }
-    memcpy(P, temp, height * width * 3);
-    delete[] temp;
+}
+
+memcpy(P, temp, height * width * 3);
+delete[] temp;
 }
 
 
 //---------------------------------------------------------------------------
+

@@ -165,6 +165,7 @@ int min1(int a,int b);
     void Superimpose(TColor ExceptPixel,Graphics::TBitmap* Bitmap1,Graphics::TBitmap* Bitmap2,Graphics::TBitmap* BitmapOpe);
     void Negado(Graphics::TBitmap* Bitmap);
     void SalyPim(Graphics::TBitmap* Bitmap);
+    void FilMed(Graphics::TBitmap* Bitmap);
     void CombiningRGB(Graphics::TBitmap* BitmapR,Graphics::TBitmap* BitmapG,Graphics::TBitmap* BitmapB,Graphics::TBitmap* BitmapRGB);
     void CombiningHSIRGB(Graphics::TBitmap* BitmapH,Graphics::TBitmap* BitmapS,Graphics::TBitmap* BitmapI,Graphics::TBitmap* BitmapRGB);
     void ObtenerBordeImagen(Graphics::TBitmap* Bitmap,int PixelsEdge,TColor ColorEdge,int PixelsRest,TColor ColorRest);

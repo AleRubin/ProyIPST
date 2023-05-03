@@ -2295,49 +2295,64 @@ int randNum = rand() % 100; //Generar un número aleatorio entre 0 y 99
 }
 }
 //----------------------------------------------------------------
-void TProcImg::FilMed(Graphics::TBitmap* Bitmap) {
-    BYTE *P;
-    BYTE *newP = new BYTE[Bitmap->Width * Bitmap->Height * 3];
-    int neighborhoodSize=1;
-    int radius = neighborhoodSize / 2;
+void TProcImg::FilMed(Graphics::TBitmap* Bitmap)
+{
+    int windowSize=2;
+    int halfWindow = windowSize / 2;
+    int height = Bitmap->Height;
+    int width = Bitmap->Width;
+    BYTE* P = (BYTE*)Bitmap->ScanLine[0];
+    BYTE* temp = new BYTE[height * width * 3];
 
-    for (int i = 0; i < Bitmap->Height; i++) {
-        for (int j = 0; j < Bitmap->Width; j++) {
-            int sumR = 0;
-            int sumG = 0;
-            int sumB = 0;
+    for (int i = 0; i < height; i++) {
+        P = (BYTE*)Bitmap->ScanLine[i];
+        for (int j = 0; j < width; j++) {
+            int sumR = 0, sumG = 0, sumB = 0;
             int count = 0;
-
-            for (int k = -radius; k <= radius; k++) {
-                for (int l = -radius; l <= radius; l++) {
-                    int row = i + k;
-                    int col = j + l;
-
-                    if (row >= 0 && row < Bitmap->Height && col >= 0 && col < Bitmap->Width) {
-                        P = (BYTE*)Bitmap->ScanLine[row];
-                        sumB += P[col * 3];
-                        sumG += P[col * 3 + 1];
-                        sumR += P[col * 3 + 2];
+            for (int k = i - halfWindow; k <= i + halfWindow; k++) {
+                if (k < 0 || k >= height) continue;
+                for (int l = j - halfWindow; l <= j + halfWindow; l++) {
+                    if (l < 0 || l >= width) continue;
+                    BYTE* neighbor = (BYTE*)Bitmap->ScanLine[k] + l * 3;
+                    if (neighbor[0] != 0 && neighbor[0] != 255 &&
+                        neighbor[1] != 0 && neighbor[1] != 255 &&
+                        neighbor[2] != 0 && neighbor[2] != 255) {
+                        sumR += neighbor[2];
+                        sumG += neighbor[1];
+                        sumB += neighbor[0];
                         count++;
                     }
                 }
             }
-
-            if (count > 0) {
-                newP[i * Bitmap->Width * 3 + j * 3] = sumB / count;
-                newP[i * Bitmap->Width * 3 + j * 3 + 1] = sumG / count;
-                newP[i * Bitmap->Width * 3 + j * 3 + 2] = sumR / count;
+            if (count == 0) {
+                temp[i * width * 3 + j * 3 + 2] = P[j * 3 + 2];
+                temp[i * width * 3 + j * 3 + 1] = P[j * 3 + 1];
+                temp[i * width * 3 + j * 3] = P[j * 3];
+            }
+            else {
+                temp[i * width * 3 + j * 3 + 2] = sumR / count;
+                temp[i * width * 3 + j * 3 + 1] = sumG / count;
+                temp[i * width * 3 + j * 3] = sumB / count;
             }
         }
     }
+    memcpy(P, temp, height * width * 3);
+    delete[] temp;
 
-    // Copiar los nuevos valores a la imagen original
-    for (int i = 0; i < Bitmap->Height; i++) {
-        P = (BYTE*)Bitmap->ScanLine[i];
-        memcpy(P, newP + i * Bitmap->Width * 3, Bitmap->Width * 3);
+
+    for (int i = 0; i < height; i++) { // RECORRER LA IMAGEN EN ALTURA
+        P = (BYTE*)Bitmap->ScanLine[i]; // OBTENER LA FILA DE LA IMAGEN
+        for (int j = 0; j < width; j++) { // RECORRER EN ANCHURA CADA FILA DE LA IMAGEN
+            temp[(height - i - 1) * width * 3 + (width - j - 1) * 3] = P[j * 3 + 2]; // COMP ROJA
+            temp[(height - i - 1) * width * 3 + (width - j - 1) * 3 + 1] = P[j * 3 + 1]; // COMP VERDE
+            temp[(height - i - 1) * width * 3 + (width - j - 1) * 3 + 2] = P[j * 3]; // COMP AZUL
+        }
     }
 
-    delete[] newP;
+    memcpy(P, temp, height * width * 3); // COPIAR LA NUEVA IMAGEN TEMPORAL EN LA IMAGEN ORIGINAL
+    delete[] temp; // LIBERAR LA MEMORIA DE LA IMAGEN TEMPORAL
 }
 
+
 //---------------------------------------------------------------------------
+
